@@ -13,11 +13,11 @@ public class Weapon : MonoBehaviour
     private void FixedUpdate()
     {
         FrameRate += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Space) && FrameRate >= Fire)
+        if (Input.GetKey(KeyCode.Space) && FrameRate >= Fire)
         {
             FrameRate = 0f;
-            Instantiate(Shot, Spawn.transform.position + transform.forward, Spawn.transform.rotation);
-            
+            GameObject s = Instantiate(Shot, Spawn.transform.position + transform.forward, Spawn.transform.rotation) as GameObject;
+
         }
     }
    
