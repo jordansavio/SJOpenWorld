@@ -4,54 +4,34 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    public GameObject[] projectilesPrefab;
-    int indexWeapon;
-    public GameObject target;
-    public GameObject laserpoint;
+    public GameObject[] Weapons;
+    int indexWeapon = 7;
+    float timeToNext;
+
     void Update()
     {
-        //movimento de cabeca
         float movx = Input.GetAxis("Mouse Y");
         transform.Rotate(new Vector3(-movx, 0, 0));
 
-        if (Input.GetKey(KeyCode.Alpha1)) indexWeapon = 0;
-        if (Input.GetKey(KeyCode.Alpha2)) indexWeapon = 1;
-        if (Input.GetKey(KeyCode.Alpha3)) indexWeapon = 2;
-        if (Input.GetKey(KeyCode.Alpha4)) indexWeapon = 3;
-        if (Input.GetKey(KeyCode.Alpha5)) indexWeapon = 4;
-        if (Input.GetKey(KeyCode.Alpha6)) indexWeapon = 5;
-        if (Input.GetKey(KeyCode.Alpha7)) indexWeapon = 6;
-        if (Input.GetKey(KeyCode.Alpha8)) indexWeapon = 7;
-        //se aperta tiro instancia o prefab
-        if (Input.GetButtonDown("Fire1"))
+        timeToNext += Time.deltaTime;
+        if (Input.GetKey(KeyCode.Q) && timeToNext >= 1f)
         {
-            //instancia o objeto e guarda a referencia
-            GameObject myprojectile=
-            Instantiate(projectilesPrefab[indexWeapon], transform.position+transform.forward,transform.rotation);
-
-            if (myprojectile.GetComponent<guidedBomb>())
+            timeToNext = 0;
+            for (int i = 0; i < 8; i++)
             {
-                myprojectile.GetComponent<guidedBomb>().target = laserpoint;
+                Weapons[i].SetActive(false);
+            }
+            indexWeapon++;
+            if (indexWeapon >= 8)
+            {
+                indexWeapon = 0;
             }
 
-            //adiciona uma forca no objeto
-            myprojectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
-
+            Weapons[indexWeapon].SetActive(true);
 
         }
-
-        if(Physics.Raycast(transform.position,transform.forward,out RaycastHit hit))
-        {
-            laserpoint.transform.position = hit.point;
-        }
-        else
-        {
-            laserpoint.transform.position = transform.position + transform.forward * 100;
-        }
-
     }
 
 
-   
 
 }
